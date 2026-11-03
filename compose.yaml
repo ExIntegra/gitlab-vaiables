@@ -1,0 +1,33 @@
+name: ci-variables
+
+services:
+  gitlabvars:
+    image: "${IMAGE:-exintegra/ci-variables:1.0.0}"
+    pull_policy: missing
+    ports:
+      - "127.0.0.1:${APP_PORT:-8081}:8080"
+    environment:
+      APP_ADDR: "0.0.0.0:8080"
+      APP_ORIGIN: "${APP_ORIGIN:-http://localhost:${APP_PORT:-8081}}"
+      GITLAB_URL: "${GITLAB_URL:-https://gitlab.com}"
+      APP_DEMO: "${APP_DEMO:-false}"
+      SESSION_TTL: "${SESSION_TTL:-1h}"
+      TRACKING_FILE: "/data/tracking.json"
+    volumes:
+      - tracking-data:/data
+    restart: unless-stopped
+    stop_grace_period: 15s
+    read_only: true
+    cap_drop:
+      - ALL s
+    security_opt:
+      - no-new-privileges:true
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+volumes:
+  tracking-data:
+    name: "${TRACKING_VOLUME:-ci-variables-data}"

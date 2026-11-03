@@ -1,0 +1,7 @@
+# Optional override for building the application from this checkout.
+# docker compose -f compose.yaml -f compose.build.yaml up --build -d
+services:
+  gitlabvars:
+    image: ci-variables:local
+    build: .
+    pull_policy: never

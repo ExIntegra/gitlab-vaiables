@@ -1,0 +1,109 @@
+name: Docker Hub image
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version without v, for example 1.0.0'
+        required: true
+        type: string
+      publish:
+        description: 'Publish the image to Docker Hub'
+        default: false
+        type: boolean
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: docker-${{ github.ref }}-${{ inputs.version }}
+  cancel-in-progress: false
+
+jobs:
+  image:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Set up Go
+        uses: actions/setup-go@v7
+        with:
+          go-version-file: go.mod
+          cache: false
+
+      - name: Test
+        run: go test ./...
+
+      - name: Vet
+        run: go vet ./...
+
+      - name: Validate release inputs
+        id: release
+        env:
+          REQUESTED_VERSION: ${{ inputs.version || github.ref_name }}
+          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+          IMAGE_NAME: ${{ vars.IMAGE_NAME || 'ci-variables' }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          version="${REQUESTED_VERSION#v}"
+          [[ "$version" =~ ^[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z]+([.-][0-9A-Za-z]+)*)?$ ]] || { echo 'Invalid release version'; exit 1; }
+          [[ "$DOCKERHUB_USERNAME" =~ ^[a-z0-9]+([._-][a-z0-9]+)*$ ]] || { echo 'Configure DOCKERHUB_USERNAME secret'; exit 1; }
+          [[ "$IMAGE_NAME" =~ ^[a-z0-9]+([._-][a-z0-9]+)*$ ]] || { echo 'Invalid IMAGE_NAME repository variable'; exit 1; }
+          stable=true
+          [[ "$version" != *-* ]] || stable=false
+          printf 'version=%s\nstable=%s\ncreated=%s\n' "$version" "$stable" "$(date -u +%Y-%m-%dT%H:%M:%SZ)" >> "$GITHUB_OUTPUT"
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v4
+        with:
+          platforms: arm64
+
+      - name: Set up Buildx
+        uses: docker/setup-buildx-action@v4
+
+      - name: Image tags and labels
+        id: meta
+        uses: docker/metadata-action@v6
+        with:
+          images: docker.io/${{ secrets.DOCKERHUB_USERNAME }}/${{ vars.IMAGE_NAME || 'ci-variables' }}
+          flavor: latest=false
+          tags: |
+            type=raw,value=${{ steps.release.outputs.version }}
+            type=raw,value=latest,enable=${{ steps.release.outputs.stable }}
+          labels: |
+            org.opencontainers.image.title=GitLab CI Variables
+            org.opencontainers.image.description=Project and group CI/CD variable management for GitLab
+            org.opencontainers.image.authors=Kalinin I. A.
+
+      - name: Login to Docker Hub
+        if: github.event_name == 'push' || inputs.publish
+        uses: docker/login-action@v4
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build image
+        uses: docker/build-push-action@v7
+        with:
+          context: .
+          platforms: linux/amd64,linux/arm64
+          push: ${{ github.event_name == 'push' || inputs.publish }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          build-args: |
+            VERSION=${{ steps.release.outputs.version }}
+            REVISION=${{ github.sha }}
+            CREATED=${{ steps.release.outputs.created }}
+            SOURCE_URL=${{ github.server_url }}/${{ github.repository }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          provenance: mode=min
+          sbom: true

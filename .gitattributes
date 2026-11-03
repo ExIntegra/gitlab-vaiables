@@ -1,0 +1,12 @@
+* text=auto
+*.go text eol=lf
+*.js text eol=lf
+*.css text eol=lf
+*.html text eol=lf
+*.md text eol=lf
+*.yaml text eol=lf
+*.yml text eol=lf
+*.tf text eol=lf
+*.ps1 text eol=crlf
+*.png binary
+*.zip binary

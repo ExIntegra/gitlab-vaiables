@@ -1,0 +1,7 @@
+# The image needs only the Go module and embedded application sources.
+**
+!go.mod
+!cmd/
+!cmd/**
+!internal/
+!internal/**

@@ -1,0 +1,339 @@
+/* The entry page uses the same SVG mark as the app header. */
+.akron-logo {
+  background: transparent;
+  border-radius: 0;
+}
+
+.top-brand .akron-logo {
+  width: 145px;
+  height: 48px;
+}
+
+.login-screen {
+  grid-template-columns: 1.04fr 1fr;
+  background: #f5f3f8;
+}
+
+.login-story {
+  position: relative;
+  isolation: isolate;
+  background: #251e34 url("/login-background.svg") center / cover no-repeat;
+  border-right: 1px solid #51465f;
+  padding: 38px 48px 28px;
+}
+
+.company-brand {
+  gap: 16px;
+}
+
+.brand-app-name {
+  color: #f8f5fd;
+  font-family: Arial, Tahoma, sans-serif;
+  font-size: 21px;
+  font-weight: 700;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+.company-brand .akron-logo {
+  width: 245px;
+  max-width: calc(100% - 218px);
+  height: auto;
+}
+
+.company-brand .gitlab-logo {
+  width: 47px;
+  height: 47px;
+}
+
+.brand-divider {
+  height: 56px;
+  background: #a89ab44d;
+}
+
+.login-story-main h1 {
+  color: #faf8fd;
+  font-size: 39px;
+  font-weight: 600;
+  letter-spacing: -.7px;
+}
+
+.login-story-main > p {
+  color: #dbd4e5;
+  font-size: 16px;
+}
+
+.login-preview {
+  background: #332a48d9;
+  border: 1px solid #665475;
+  border-radius: 9px;
+  padding: 0;
+  overflow: hidden;
+  transform: rotate(-1.5deg);
+  box-shadow: 0 16px 35px #170f242e;
+  font-size: 12px;
+}
+
+.login-preview > div {
+  padding: 0;
+  border: 0;
+}
+
+.login-preview .login-preview-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 16px;
+  border-bottom: 1px solid #66547599;
+  color: #c7bbdb;
+  font-size: 11px;
+}
+
+.preview-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 2px;
+  background: #fc6d26;
+  flex-shrink: 0;
+}
+
+.preview-context {
+  margin-left: auto;
+  color: #a698bc;
+  font-size: 10px;
+}
+
+.login-preview .login-preview-row {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr 15px;
+  align-items: center;
+  gap: 10px;
+  margin: 0 17px;
+  padding: 14px 0;
+  border-bottom: 1px solid #66547588;
+  font-family: Consolas, "Courier New", monospace;
+}
+
+.login-preview-row .icon {
+  width: 13px;
+  height: 13px;
+  color: #c6a9ee;
+}
+
+.login-preview .login-preview-footer {
+  padding: 12px 16px;
+  color: #b2a3c8;
+  font-size: 11px;
+}
+
+.login-preview b {
+  color: #e2d9ed;
+  font-weight: 400;
+}
+
+.login-preview code {
+  color: #bfb0d0;
+  font-size: 12px;
+  padding: 0;
+  background: transparent;
+}
+
+.login-story-footer {
+  color: #c6bdcf;
+  font-size: 13px;
+}
+
+.login-main {
+  padding: 38px 32px;
+  background-color: #f6f4f9;
+  background-image:
+    linear-gradient(135deg, #fff9 0%, #fff0 70%),
+    linear-gradient(#b8adca17 1px, transparent 1px),
+    linear-gradient(90deg, #b8adca17 1px, transparent 1px);
+  background-size: auto, 80px 80px, 80px 80px;
+}
+
+.login-form-wrap {
+  max-width: 440px;
+  padding: 32px 34px;
+  border: 1px solid #e1dce8;
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 18px 54px #30213d0a, 0 2px 8px #30213d03;
+}
+
+.login-main h2 {
+  font-size: 25px;
+  color: #2e2539;
+}
+
+.login-main .intro {
+  margin-bottom: 25px;
+}
+
+.login-main input,
+.login-main .button {
+  border-radius: 6px;
+}
+
+.login-main input[readonly] {
+  background: #f7f5fa;
+}
+
+.login-main .field-help {
+  margin-bottom: 20px;
+}
+
+.login-main #login-submit {
+  margin-top: 18px;
+}
+
+.login-security {
+  margin-top: 21px;
+  padding-top: 18px;
+  border-color: #eeeaf2;
+  font-size: 12px;
+}
+
+@media (min-width: 1500px) {
+  .login-story {
+    padding: 46px 64px 32px;
+  }
+
+  .login-story-main {
+    max-width: 440px;
+  }
+
+  .company-brand .akron-logo {
+    width: 270px;
+  }
+}
+
+@media (max-width: 1050px) and (min-width: 801px) {
+  .login-story {
+    padding-left: 30px;
+    padding-right: 30px;
+  }
+
+  .company-brand {
+    gap: 16px;
+  }
+
+  .company-brand .akron-logo {
+    width: 220px;
+    max-width: calc(100% - 202px);
+  }
+
+  .brand-app-name {
+    font-size: 19px;
+  }
+
+  .login-main {
+    padding-left: 22px;
+    padding-right: 22px;
+  }
+
+  .login-form-wrap {
+    padding: 28px 25px;
+  }
+}
+
+@media (max-width: 800px) {
+  .login-screen {
+    grid-template-columns: 1fr;
+  }
+
+  .login-story {
+    padding: 26px 28px 22px;
+    background-position: center 66%;
+    border-right: 0;
+    border-bottom: 1px solid #51465f;
+  }
+
+  .company-brand .akron-logo {
+    width: 220px;
+    max-width: calc(100% - 192px);
+  }
+
+  .brand-app-name {
+    font-size: 19px;
+  }
+
+  .company-brand .gitlab-logo {
+    width: 39px;
+    height: 39px;
+  }
+
+  .brand-divider {
+    height: 43px;
+  }
+
+  .login-story-main {
+    margin: 27px 0 28px;
+  }
+
+  .login-story-main h1 {
+    font-size: 29px;
+  }
+
+  .login-story-main > p {
+    font-size: 15px;
+  }
+
+  .login-main {
+    padding: 28px 22px 36px;
+  }
+
+  .login-form-wrap {
+    max-width: 480px;
+    padding: 29px 28px;
+  }
+
+  .top-brand .akron-logo {
+    width: 115px;
+    height: 40px;
+  }
+}
+
+@media (max-width: 480px) {
+  .login-story {
+    padding-left: 22px;
+    padding-right: 22px;
+  }
+
+  .company-brand {
+    gap: 12px;
+  }
+
+  .company-brand .akron-logo {
+    width: 135px;
+    max-width: calc(100% - 150px);
+  }
+
+  .company-brand .gitlab-logo {
+    width: 35px;
+    height: 35px;
+  }
+
+  .company-brand .brand-divider {
+    display: none;
+  }
+
+  .brand-app-name {
+    font-size: 15px;
+  }
+
+  .login-main {
+    padding: 22px 14px 28px;
+  }
+
+  .login-form-wrap {
+    padding: 26px 22px;
+    border-radius: 9px;
+  }
+
+  .top-brand .akron-logo {
+    width: 91px;
+    height: 36px;
+  }
+}
